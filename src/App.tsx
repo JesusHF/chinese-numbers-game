@@ -13,6 +13,7 @@ export const App: React.FC = () => {
   const [settings, setSettings] = useState<GameSettings>({
     numberType: 'classic',
     difficulty: 'easy',
+    voice: 'xiaoxiao',
     range: DEFAULT_RANGES_BY_DIFFICULTY.easy,
     dateOptions: {
       includeYears: false,
@@ -25,7 +26,6 @@ export const App: React.FC = () => {
   const [results, setResults] = useState<UserAnswerResult[]>([]);
 
   const handleStartGame = () => {
-    // Generate full question batch based on active settings
     const newQuestions: Question[] = [];
     for (let i = 0; i < settings.totalQuestions; i++) {
       newQuestions.push(generateQuestion(settings));

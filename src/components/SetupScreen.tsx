@@ -3,12 +3,15 @@ import {
   GameSettings, 
   NumberTypeId, 
   DifficultyId, 
+  VoiceId,
+  VOICES,
   DIFFICULTIES, 
   RANGE_MIN_OPTIONS, 
   RANGE_MAX_OPTIONS, 
   DEFAULT_RANGES_BY_DIFFICULTY 
 } from '../types/game';
-import { Hash, Phone, Calendar, Play, Eye, EyeOff } from 'lucide-react';
+import { audioPlayer } from '../utils/audioPlayer';
+import { Hash, Phone, Calendar, Play, Eye, EyeOff, Volume2 } from 'lucide-react';
 
 interface SetupScreenProps {
   settings: GameSettings;
@@ -26,7 +29,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
   };
 
   const handleDifficultySelect = (diff: DifficultyId) => {
-    // When changing difficulty, automatically synchronize range to smart defaults
     const defaultRange = DEFAULT_RANGES_BY_DIFFICULTY[diff];
     onUpdateSettings({
       ...settings,
@@ -35,8 +37,13 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
     });
   };
 
+  const handleVoiceToggle = (voiceId: VoiceId) => {
+    onUpdateSettings({ ...settings, voice: voiceId });
+    // Play a preview sound (e.g. '8' - bā)
+    audioPlayer.playTokens(['8'], 1.0, voiceId);
+  };
+
   const handleMinChange = (minVal: number) => {
-    // If min exceeds current max, bump max to next available option
     let newMax = settings.range.max;
     if (minVal > newMax) {
       const validMax = RANGE_MAX_OPTIONS.find((v) => v >= minVal) || RANGE_MAX_OPTIONS[RANGE_MAX_OPTIONS.length - 1];
@@ -49,7 +56,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
   };
 
   const handleMaxChange = (maxVal: number) => {
-    // If max is less than current min, drop min
     let newMin = settings.range.min;
     if (maxVal < newMin) {
       const validMins = [...RANGE_MIN_OPTIONS].reverse();
@@ -160,14 +166,41 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         )}
       </div>
 
-      {/* 2. Difficulty Section (Speed & Visual Aid) */}
+      {/* 2. Difficulty Section (Speed & Visual Aid) + Compact Voice Switch Toggle */}
       <div className="bg-stone-800/60 border border-stone-700/60 rounded-2xl p-6 shadow-xl space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-base font-semibold text-stone-200 flex items-center space-x-2">
             <span className="w-6 h-6 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center text-xs font-bold">2</span>
             <span>Difficulty (Speed & Visual Aid)</span>
           </h2>
-          <span className="text-xs text-stone-400">Controls speech rate & visual clues</span>
+
+          {/* Compact Voice Switch Toggle */}
+          <div className="flex items-center space-x-2 bg-stone-900/90 border border-stone-700/70 p-1 rounded-xl">
+            <span className="text-[11px] text-stone-400 pl-1.5 pr-0.5 font-medium flex items-center space-x-1">
+              <Volume2 className="w-3 h-3 text-amber-400" />
+              <span>Voice:</span>
+            </span>
+            {(Object.keys(VOICES) as VoiceId[]).map((vId) => {
+              const voice = VOICES[vId];
+              const isSelected = settings.voice === vId;
+              return (
+                <button
+                  key={vId}
+                  type="button"
+                  onClick={() => handleVoiceToggle(vId)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 ${
+                    isSelected
+                      ? 'bg-red-600 text-white shadow-sm font-semibold'
+                      : 'text-stone-400 hover:text-stone-200 hover:bg-stone-800'
+                  }`}
+                  title={`Switch to ${voice.name} (${voice.gender}) natural voice`}
+                >
+                  <span>{voice.avatar}</span>
+                  <span>{voice.name}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -211,7 +244,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         </div>
       </div>
 
-      {/* 3. Number Range Section (Decoupled with Dual Dropdowns) */}
+      {/* 3. Number Range Section */}
       {settings.numberType === 'classic' && (
         <div className="bg-stone-800/60 border border-stone-700/60 rounded-2xl p-6 shadow-xl space-y-4">
           <div className="flex items-center justify-between">
@@ -229,7 +262,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
           </p>
 
           <div className="grid grid-cols-2 gap-4">
-            {/* Minimum Dropdown */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-stone-300">From (Minimum)</label>
               <select
@@ -245,7 +277,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
               </select>
             </div>
 
-            {/* Maximum Dropdown */}
             <div className="space-y-1.5">
               <label className="text-xs font-medium text-stone-300">To (Maximum)</label>
               <select

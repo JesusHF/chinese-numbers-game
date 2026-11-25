@@ -21,12 +21,11 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({
   const diffConfig = DIFFICULTIES[settings.difficulty];
 
   const handleReplayResult = (res: UserAnswerResult) => {
-    audioPlayer.playTokens(res.question.audioTokens, diffConfig.speed);
+    audioPlayer.playTokens(res.question.audioTokens, diffConfig.speed, settings.voice);
   };
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-8">
-      {/* Summary Score Card */}
       <div className="bg-stone-800/60 border border-stone-700/60 rounded-3xl p-8 shadow-2xl text-center space-y-6">
         <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-amber-500 to-red-600 flex items-center justify-center shadow-xl shadow-amber-950/40">
           <Trophy className="w-10 h-10 text-white" />
@@ -35,7 +34,7 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({
         <div>
           <h2 className="text-3xl font-black text-stone-100">Practice Completed!</h2>
           <p className="text-sm text-stone-400 mt-1">
-            {diffConfig.name} ({diffConfig.speed}x speed) • {settings.numberType.toUpperCase()}
+            {diffConfig.name} ({diffConfig.speed}x speed) • Voice: {settings.voice === 'xiaoxiao' ? 'Xiaoxiao (Female)' : 'Yunxi (Male)'}
           </p>
         </div>
 
@@ -78,7 +77,6 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({
         </div>
       </div>
 
-      {/* Review List */}
       <div className="bg-stone-800/60 border border-stone-700/60 rounded-3xl p-6 shadow-xl space-y-4">
         <h3 className="text-sm font-semibold text-stone-300">Question Review ({results.length} questions)</h3>
 

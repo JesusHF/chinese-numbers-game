@@ -32,44 +32,43 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
   const diffConfig = DIFFICULTIES[settings.difficulty];
 
-  // Play audio for current question
+  // Play audio for current question using active voice and speed
   const playAudio = (speedMultiplier: number = 1.0) => {
     setIsPlayingAudio(true);
-    audioPlayer.playTokens(question.audioTokens, diffConfig.speed * speedMultiplier, () => {
-      setIsPlayingAudio(false);
-    });
+    audioPlayer.playTokens(
+      question.audioTokens,
+      diffConfig.speed * speedMultiplier,
+      settings.voice,
+      () => {
+        setIsPlayingAudio(false);
+      }
+    );
   };
 
-  // Autoplay upon question presentation
   useEffect(() => {
     setUserInput('');
     setCurrentResult(null);
     setReplaysCount(0);
     startTimeRef.current = Date.now();
 
-    // Auto-focus input
     if (inputRef.current) {
       inputRef.current.focus();
     }
 
-    // Play immediately at specified speed
     playAudio(1.0);
 
     return () => {
       audioPlayer.stop();
     };
-  }, [question.id]);
+  }, [question.id, settings.voice]);
 
-  // Handle keyboard shortcuts (Enter to submit/next, Space to replay)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Space to replay (when not actively typing space in an input)
       if (e.code === 'Space' && document.activeElement !== inputRef.current) {
         e.preventDefault();
         setReplaysCount((c) => c + 1);
         playAudio(1.0);
       }
-      // Enter to advance when feedback card is showing
       if (e.code === 'Enter' && currentResult !== null) {
         e.preventDefault();
         onNextQuestion();
@@ -78,7 +77,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentResult, question.audioTokens, diffConfig.speed]);
+  }, [currentResult, question.audioTokens, diffConfig.speed, settings.voice]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -110,7 +109,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
   return (
     <div className="max-w-xl mx-auto py-8 px-4 space-y-6">
-      {/* Top progress and quit */}
       <div className="flex items-center justify-between text-xs text-stone-400">
         <div className="flex items-center space-x-2">
           <span className="font-semibold text-stone-200">
@@ -131,7 +129,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         </button>
       </div>
 
-      {/* Progress bar */}
       <div className="w-full h-1.5 bg-stone-800 rounded-full overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-red-500 to-amber-500 transition-all duration-300"
@@ -139,9 +136,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         />
       </div>
 
-      {/* Main interaction card */}
       <div className="bg-stone-800/60 border border-stone-700/60 rounded-3xl p-8 shadow-2xl space-y-6 text-center">
-        {/* Audio Visualizer & Clues Area */}
         <div className="flex flex-col items-center justify-center space-y-4 py-4">
           <button
             type="button"
@@ -167,16 +162,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </button>
           </div>
 
-          {/* Visual Clues Gate */}
           {diffConfig.visualClues ? (
-            /* EASY MODE: Visual Scaffolding (Hanzi and Pinyin) */
             <div className="pt-2 text-center space-y-1">
               <span className="text-xs text-emerald-400 font-medium">Easy mode visual aid:</span>
               <div className="text-amber-400 text-sm font-medium">{question.pinyin}</div>
               <div className="chinese-font text-stone-200 text-2xl font-bold">{question.hanzi}</div>
             </div>
           ) : (
-            /* MEDIUM & HARD: STRICT AUDIO-ONLY (ZERO VISUAL CLUES) */
             <div className="pt-2 text-center">
               <span className="text-xs text-stone-400/80 flex items-center justify-center space-x-1">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
@@ -186,7 +178,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({
           )}
         </div>
 
-        {/* Input Form */}
         {currentResult === null ? (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">

@@ -2,6 +2,30 @@ export type NumberTypeId = 'classic' | 'phone' | 'date';
 
 export type DifficultyId = 'easy' | 'medium' | 'hard';
 
+export type VoiceId = 'xiaoxiao' | 'yunxi';
+
+export interface VoiceConfig {
+  id: VoiceId;
+  name: string;
+  gender: string;
+  avatar: string;
+}
+
+export const VOICES: Record<VoiceId, VoiceConfig> = {
+  xiaoxiao: {
+    id: 'xiaoxiao',
+    name: 'Xiaoxiao',
+    gender: 'Female',
+    avatar: '👩',
+  },
+  yunxi: {
+    id: 'yunxi',
+    name: 'Yunxi',
+    gender: 'Male',
+    avatar: '👨',
+  },
+};
+
 export interface DifficultyConfig {
   id: DifficultyId;
   name: string;
@@ -48,24 +72,13 @@ export const DEFAULT_RANGES_BY_DIFFICULTY: Record<DifficultyId, NumberRange> = {
   hard: { min: 10, max: 9999999 },
 };
 
-export interface AudioTokenSequence {
-  // Array of token keys (e.g. ['5', '100', '2', '10', '3']) or silence pauses { pause: number } in ms
-  items: (string | { pause: number })[];
-}
-
 export interface Question {
   id: string;
-  // What the user is expected to type (digits only or formatted string)
   expectedAnswer: string;
-  // Display string after answer reveal (e.g. "523", "138-1234-5678", "2024年10月1号")
   displayLabel: string;
-  // Audio playback token list
   audioTokens: (string | { pause: number })[];
-  // Chinese Hanzi string (e.g. "五百二十三")
   hanzi: string;
-  // Tone-marked Pinyin (e.g. "wǔ bǎi èr shí sān")
   pinyin: string;
-  // Place value or breakdown explanation
   breakdown?: string;
 }
 
@@ -80,8 +93,8 @@ export interface UserAnswerResult {
 export interface GameSettings {
   numberType: NumberTypeId;
   difficulty: DifficultyId;
+  voice: VoiceId;
   range: NumberRange;
-  // Specific options for types (e.g., dates)
   dateOptions: {
     includeYears: boolean;
   };

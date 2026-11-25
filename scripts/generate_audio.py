@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
 """
-Generate and precision-trim Chinese number and unit audio assets for the Chinese Numbers Game.
-Uses macOS native Mandarin voice ('say -v Tingting') and afconvert, then applies sample-accurate
-silence trimming with linear fade-in and fade-out to guarantee gapless, zero-latency playback.
+Generate and precision-trim high-definition, natural human Chinese audio assets
+using Microsoft Neural TTS voices (Xiaoxiao - Female, Yunxi - Male).
 """
 
 import os
+import asyncio
 import subprocess
 import wave
 import struct
 import json
+import edge_tts
 
-AUDIO_OUTPUT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../public/audio"))
+AUDIO_BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../public/audio"))
 
-# 21 Audio tokens needed for all Chinese number game modes
+VOICES = [
+    {"id": "xiaoxiao", "name": "Xiaoxiao", "gender": "Female", "tts_voice": "zh-CN-XiaoxiaoNeural"},
+    {"id": "yunxi", "name": "Yunxi", "gender": "Male", "tts_voice": "zh-CN-YunxiNeural"},
+]
+
 TOKENS = [
     # Digits 0-9
     {"key": "0", "char": "零", "pinyin": "líng", "desc": "Zero"},
@@ -45,11 +50,7 @@ TOKENS = [
     {"key": "ri", "char": "日", "pinyin": "rì", "desc": "Day (Formal)"},
 ]
 
-def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, pad_ms=10, fade_ms=5):
-    """
-    Trims leading and trailing silence from a 16-bit PCM WAV file based on amplitude threshold,
-    preserves a tiny boundary margin, and applies a subtle linear fade to prevent pops.
-    """
+def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, pad_ms=15, fade_ms=5):
     with wave.open(input_wav_path, 'rb') as w:
         nchannels = w.getnchannels()
         sampwidth = w.getsampwidth()
@@ -59,18 +60,14 @@ def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, p
     
     assert sampwidth == 2, "Only 16-bit PCM is supported"
     
-    # Read mono or interleaved samples
     total_samples = nframes * nchannels
     samples = list(struct.unpack(f'<{total_samples}h', raw_frames))
-    
     if not samples:
         return 0.0
     
-    # Find peak amplitude to set dynamic threshold
     peak = max(abs(s) for s in samples)
     threshold = max(300, int(peak * threshold_ratio))
     
-    # Find start index
     start_frame = 0
     for i in range(0, total_samples, nchannels):
         frame_max = max(abs(samples[i + c]) for c in range(nchannels))
@@ -79,7 +76,6 @@ def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, p
             start_frame = max(0, (i // nchannels) - pad_frames)
             break
             
-    # Find end index
     end_frame = nframes
     for i in range(total_samples - nchannels, -1, -nchannels):
         frame_max = max(abs(samples[i + c]) for c in range(nchannels))
@@ -91,7 +87,6 @@ def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, p
     trimmed_samples = samples[start_frame * nchannels : end_frame * nchannels]
     trimmed_frame_count = len(trimmed_samples) // nchannels
     
-    # Apply fade-in and fade-out (5ms)
     fade_frames = min(trimmed_frame_count // 4, int(framerate * (fade_ms / 1000.0)))
     if fade_frames > 0:
         for f in range(fade_frames):
@@ -102,73 +97,75 @@ def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, p
                 end_idx = (trimmed_frame_count - 1 - f) * nchannels + c
                 trimmed_samples[end_idx] = int(trimmed_samples[end_idx] * factor)
                 
-    # Write output WAV
     with wave.open(output_wav_path, 'wb') as out_w:
         out_w.setparams((nchannels, sampwidth, framerate, trimmed_frame_count, 'NONE', 'not compressed'))
         out_w.writeframes(struct.pack(f'<{len(trimmed_samples)}h', *trimmed_samples))
         
-    duration_sec = trimmed_frame_count / float(framerate)
-    return duration_sec
+    return trimmed_frame_count / float(framerate)
 
-def main():
-    os.makedirs(AUDIO_OUTPUT_DIR, exist_ok=True)
-    temp_dir = "/tmp/chinese_audio_tmp"
-    os.makedirs(temp_dir, exist_ok=True)
+async def generate_voice_assets(voice_conf, temp_dir):
+    voice_id = voice_conf["id"]
+    tts_voice = voice_conf["tts_voice"]
+    output_dir = os.path.join(AUDIO_BASE_DIR, voice_id)
+    os.makedirs(output_dir, exist_ok=True)
     
     manifest = []
-    print(f"Generating {len(TOKENS)} Chinese audio assets into {AUDIO_OUTPUT_DIR}...")
+    print(f"\n--- Generating Voice: {voice_conf['name']} ({voice_conf['gender']} - {tts_voice}) ---")
     
     for item in TOKENS:
         key = item["key"]
         char = item["char"]
         pinyin = item["pinyin"]
-        desc = item["desc"]
         
-        raw_aiff = os.path.join(temp_dir, f"{key}.aiff")
-        raw_wav = os.path.join(temp_dir, f"{key}_raw.wav")
-        final_wav = os.path.join(AUDIO_OUTPUT_DIR, f"{key}.wav")
+        raw_mp3 = os.path.join(temp_dir, f"{voice_id}_{key}.mp3")
+        raw_wav = os.path.join(temp_dir, f"{voice_id}_{key}_raw.wav")
+        final_wav = os.path.join(output_dir, f"{key}.wav")
         
-        # 1. Generate speech using macOS native voice Tingting (zh_CN)
-        subprocess.run(["say", "-v", "Tingting", "-o", raw_aiff, char], check=True)
+        # 1. Synthesize with Neural TTS
+        communicate = edge_tts.Communicate(char, tts_voice)
+        await communicate.save(raw_mp3)
         
-        # 2. Convert to standard 24kHz 16-bit mono WAV using afconvert
+        # 2. Convert to standard 24kHz 16-bit mono PCM WAV
         subprocess.run([
             "afconvert",
             "-f", "WAVE",
             "-d", "LEI16@24000",
             "-c", "1",
-            raw_aiff,
+            raw_mp3,
             raw_wav
         ], check=True)
         
-        # 3. Precision silence trim and micro-fade
-        duration = trim_and_fade_audio(raw_wav, final_wav, threshold_ratio=0.03, pad_ms=10, fade_ms=5)
+        # 3. Precision silence trimming
+        duration = trim_and_fade_audio(raw_wav, final_wav, threshold_ratio=0.03, pad_ms=15, fade_ms=5)
         file_size = os.path.getsize(final_wav)
         
         manifest.append({
             "key": key,
             "char": char,
             "pinyin": pinyin,
-            "desc": desc,
+            "desc": item["desc"],
             "file": f"{key}.wav",
             "durationSec": round(duration, 3),
             "sizeBytes": file_size
         })
         
-        print(f"  ✓ [{key:>9}] {char} ({pinyin:<5}) -> {duration:.3f}s ({file_size} bytes)")
+        print(f"  ✓ [{voice_id}] [{key:>9}] {char} ({pinyin:<5}) -> {duration:.3f}s")
         
-        # Cleanup temp files for this token
-        if os.path.exists(raw_aiff):
-            os.remove(raw_aiff)
-        if os.path.exists(raw_wav):
-            os.remove(raw_wav)
-            
-    manifest_path = os.path.join(AUDIO_OUTPUT_DIR, "manifest.json")
+        if os.path.exists(raw_mp3): os.remove(raw_mp3)
+        if os.path.exists(raw_wav): os.remove(raw_wav)
+        
+    manifest_path = os.path.join(output_dir, "manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False, indent=2)
+
+async def main():
+    temp_dir = "/tmp/chinese_neural_tmp"
+    os.makedirs(temp_dir, exist_ok=True)
+    
+    for voice_conf in VOICES:
+        await generate_voice_assets(voice_conf, temp_dir)
         
-    print(f"\nAll {len(TOKENS)} audio files generated and trimmed successfully!")
-    print(f"Manifest written to: {manifest_path}")
+    print("\nAll neural voice assets generated successfully!")
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
