@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { SetupScreen } from './components/SetupScreen';
 import { GameScreen } from './components/GameScreen';
 import { ResultsScreen } from './components/ResultsScreen';
+import { audioPlayer } from './utils/audioPlayer';
 
 type ScreenState = 'setup' | 'playing' | 'results';
 
@@ -34,6 +35,13 @@ export const App: React.FC = () => {
       language: langId,
       voice: lang.defaultVoice,
     }));
+
+    // Switching language ends the current practice session and returns to the main menu.
+    audioPlayer.stop();
+    setQuestions([]);
+    setCurrentQuestionIndex(0);
+    setResults([]);
+    setScreen('setup');
   };
 
   const handleStartGame = () => {
