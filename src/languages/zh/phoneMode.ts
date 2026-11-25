@@ -1,4 +1,4 @@
-import { Question } from '../types/game';
+import { Question } from '../../types/game';
 
 const PHONE_DIGIT_HANZI: Record<string, string> = {
   '0': '零',

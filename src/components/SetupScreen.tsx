@@ -1,15 +1,15 @@
 import React from 'react';
-import { 
-  GameSettings, 
-  NumberTypeId, 
-  DifficultyId, 
-  VoiceId,
-  VOICES,
-  DIFFICULTIES, 
-  RANGE_MIN_OPTIONS, 
-  RANGE_MAX_OPTIONS, 
-  DEFAULT_RANGES_BY_DIFFICULTY 
+import {
+  GameSettings,
+  NumberTypeId,
+  DifficultyId,
+  DIFFICULTIES,
+  RANGE_MIN_OPTIONS,
+  RANGE_MAX_OPTIONS,
+  DEFAULT_RANGES_BY_DIFFICULTY
 } from '../types/game';
+import { VoiceConfig } from '../types/language';
+import { getLanguage } from '../languages';
 import { audioPlayer } from '../utils/audioPlayer';
 import { Hash, Phone, Calendar, Play, Eye, EyeOff, Volume2 } from 'lucide-react';
 
@@ -24,6 +24,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
   onUpdateSettings,
   onStartGame,
 }) => {
+  const lang = getLanguage(settings.language);
+  const voices = lang.voices;
+
   const handleTypeSelect = (type: NumberTypeId) => {
     onUpdateSettings({ ...settings, numberType: type });
   };
@@ -37,10 +40,10 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
     });
   };
 
-  const handleVoiceToggle = (voiceId: VoiceId) => {
+  const handleVoiceToggle = (voiceId: string) => {
     onUpdateSettings({ ...settings, voice: voiceId });
-    // Play a preview sound (e.g. '8' - bā)
-    audioPlayer.playTokens(['8'], 1.0, voiceId);
+    // Play a preview sound (e.g. '8')
+    audioPlayer.playTokens(['8'], 1.0, settings.language, voiceId);
   };
 
   const handleMinChange = (minVal: number) => {
@@ -67,6 +70,19 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
     });
   };
 
+  // Language-specific mode descriptions
+  const modeDescriptions = {
+    classic: settings.language === 'ja'
+      ? 'Standard positional values (百, 千, 万, 億) across any chosen range.'
+      : 'Standard positional values (百, 千, 万, 亿) across any chosen range.',
+    phone: settings.language === 'ja'
+      ? 'Digit-by-digit cadence for Japanese phone numbers (090, 080, 070).'
+      : <>Digit-by-digit cadence where 1 is spoken as <strong className="text-amber-300">yāo (幺)</strong>.</>,
+    date: settings.language === 'ja'
+      ? 'Japanese dates with native day readings (ついたち, ふつか, みっか...).'
+      : 'Months (月) & days (号), with optional year (年) prefix.',
+  };
+
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-8">
       {/* 1. Number Type Section */}
@@ -76,7 +92,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
             <span className="w-6 h-6 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center text-xs font-bold">1</span>
             <span>Select Number Type</span>
           </h2>
-          <span className="text-xs text-stone-400">Extensible Practice Modes</span>
+          <span className="text-xs text-stone-400">{lang.uiText.typeHint}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -97,7 +113,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
               <span className="font-semibold text-stone-100">Classic Numbers</span>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed">
-              Standard positional values (百, 千, 万, 亿) across any chosen range.
+              {modeDescriptions.classic}
             </p>
           </button>
 
@@ -118,7 +134,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
               <span className="font-semibold text-stone-100">Phone Numbers</span>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed">
-              Digit-by-digit cadence where 1 is spoken as <strong className="text-amber-300">yāo (幺)</strong>.
+              {modeDescriptions.phone}
             </p>
           </button>
 
@@ -139,7 +155,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
               <span className="font-semibold text-stone-100">Dates</span>
             </div>
             <p className="text-xs text-stone-400 leading-relaxed">
-              Months (月) & days (号), with optional year (年) prefix.
+              {modeDescriptions.date}
             </p>
           </button>
         </div>
@@ -147,7 +163,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         {/* Date options conditional toggle */}
         {settings.numberType === 'date' && (
           <div className="mt-3 p-3 bg-stone-900/80 rounded-xl border border-stone-700/50 flex items-center justify-between">
-            <span className="text-xs text-stone-300">Include Years in dates (e.g. 2024年)?</span>
+            <span className="text-xs text-stone-300">
+              Include Years in dates (e.g. 2024年)?
+            </span>
             <label className="flex items-center cursor-pointer space-x-2">
               <input
                 type="checkbox"
@@ -180,8 +198,8 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
               <Volume2 className="w-3 h-3 text-amber-400" />
               <span>Voice:</span>
             </span>
-            {(Object.keys(VOICES) as VoiceId[]).map((vId) => {
-              const voice = VOICES[vId];
+            {Object.keys(voices).map((vId) => {
+              const voice: VoiceConfig = voices[vId];
               const isSelected = settings.voice === vId;
               return (
                 <button
@@ -229,7 +247,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                   {conf.visualClues ? (
                     <span className="flex items-center space-x-1 text-emerald-400">
                       <Eye className="w-3.5 h-3.5" />
-                      <span>Visual Hanzi & Pinyin</span>
+                      <span>Visual {settings.language === 'ja' ? 'Kanji & Kana' : 'Hanzi & Pinyin'}</span>
                     </span>
                   ) : (
                     <span className="flex items-center space-x-1 text-amber-400 font-medium">

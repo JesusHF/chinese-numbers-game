@@ -1,13 +1,15 @@
 import React from 'react';
 import { UserAnswerResult } from '../types/game';
+import { LanguageUIText } from '../types/language';
 import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
 
 interface FeedbackCardProps {
   result: UserAnswerResult;
+  uiText: LanguageUIText;
   onNext: () => void;
 }
 
-export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, onNext }) => {
+export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, uiText, onNext }) => {
   const { question, userAnswer, isCorrect } = result;
 
   return (
@@ -32,7 +34,7 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, onNext }) =>
           )}
           <div>
             <h3 className="font-bold text-lg text-stone-100">
-              {isCorrect ? 'Correct! 很好！' : 'Incorrect'}
+              {isCorrect ? uiText.correctLabel : uiText.incorrectLabel}
             </h3>
             <p className="text-xs text-stone-400">
               {isCorrect

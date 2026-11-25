@@ -1,30 +1,8 @@
+import { LanguageId } from './language';
+
 export type NumberTypeId = 'classic' | 'phone' | 'date';
 
 export type DifficultyId = 'easy' | 'medium' | 'hard';
-
-export type VoiceId = 'xiaoxiao' | 'yunxi';
-
-export interface VoiceConfig {
-  id: VoiceId;
-  name: string;
-  gender: string;
-  avatar: string;
-}
-
-export const VOICES: Record<VoiceId, VoiceConfig> = {
-  xiaoxiao: {
-    id: 'xiaoxiao',
-    name: 'Xiaoxiao',
-    gender: 'Female',
-    avatar: '👩',
-  },
-  yunxi: {
-    id: 'yunxi',
-    name: 'Yunxi',
-    gender: 'Male',
-    avatar: '👨',
-  },
-};
 
 export interface DifficultyConfig {
   id: DifficultyId;
@@ -40,7 +18,7 @@ export const DIFFICULTIES: Record<DifficultyId, DifficultyConfig> = {
     name: 'Easy',
     speed: 0.7,
     visualClues: true,
-    description: '0.7x speed • Hanzi & Pinyin guides visible',
+    description: '0.7x speed • Visual guides visible',
   },
   medium: {
     id: 'medium',
@@ -77,8 +55,8 @@ export interface Question {
   expectedAnswer: string;
   displayLabel: string;
   audioTokens: (string | { pause: number })[];
-  hanzi: string;
-  pinyin: string;
+  hanzi: string; // Native text representation (Hanzi / Kanji / Kana)
+  pinyin: string; // Phonetic reading (Pinyin / Furigana / Romaji)
   breakdown?: string;
 }
 
@@ -91,9 +69,10 @@ export interface UserAnswerResult {
 }
 
 export interface GameSettings {
+  language: LanguageId;
   numberType: NumberTypeId;
   difficulty: DifficultyId;
-  voice: VoiceId;
+  voice: string;
   range: NumberRange;
   dateOptions: {
     includeYears: boolean;

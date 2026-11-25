@@ -1,4 +1,4 @@
-import { Question } from '../types/game';
+import { Question } from '../../types/game';
 
 const DIGIT_HANZI: Record<number, string> = {
   0: '零', 1: '一', 2: '二', 3: '三', 4: '四',

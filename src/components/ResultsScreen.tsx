@@ -1,6 +1,7 @@
 import React from 'react';
 import { UserAnswerResult, DIFFICULTIES, GameSettings } from '../types/game';
 import { audioPlayer } from '../utils/audioPlayer';
+import { getLanguage } from '../languages';
 import { Trophy, RotateCcw, Volume2, CheckCircle2, XCircle, Sliders } from 'lucide-react';
 
 interface ResultsScreenProps {
@@ -19,9 +20,16 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({
   const correctCount = results.filter((r) => r.isCorrect).length;
   const accuracyPct = Math.round((correctCount / Math.max(1, results.length)) * 100);
   const diffConfig = DIFFICULTIES[settings.difficulty];
+  const lang = getLanguage(settings.language);
+
+  // Find the voice display name from language definition
+  const voiceConfig = lang.voices[settings.voice];
+  const voiceDisplayName = voiceConfig
+    ? `${voiceConfig.name} (${voiceConfig.gender})`
+    : settings.voice;
 
   const handleReplayResult = (res: UserAnswerResult) => {
-    audioPlayer.playTokens(res.question.audioTokens, diffConfig.speed, settings.voice);
+    audioPlayer.playTokens(res.question.audioTokens, diffConfig.speed, settings.language, settings.voice);
   };
 
   return (
@@ -34,7 +42,7 @@ export const ResultsScreen: React.FC<ResultsScreenProps> = ({
         <div>
           <h2 className="text-3xl font-black text-stone-100">Practice Completed!</h2>
           <p className="text-sm text-stone-400 mt-1">
-            {diffConfig.name} ({diffConfig.speed}x speed) • Voice: {settings.voice === 'xiaoxiao' ? 'Xiaoxiao (Female)' : 'Yunxi (Male)'}
+            {lang.flag} {lang.nativeName} • {diffConfig.name} ({diffConfig.speed}x speed) • Voice: {voiceDisplayName}
           </p>
         </div>
 

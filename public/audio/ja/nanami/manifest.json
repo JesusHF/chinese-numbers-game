@@ -1,0 +1,344 @@
+[
+  {
+    "key": "0",
+    "char": "ゼロ",
+    "pinyin": "zero",
+    "desc": "Zero",
+    "file": "0.wav",
+    "durationSec": 0.566,
+    "sizeBytes": 27228
+  },
+  {
+    "key": "1",
+    "char": "いち",
+    "pinyin": "ichi",
+    "desc": "One",
+    "file": "1.wav",
+    "durationSec": 0.627,
+    "sizeBytes": 30158
+  },
+  {
+    "key": "2",
+    "char": "に",
+    "pinyin": "ni",
+    "desc": "Two",
+    "file": "2.wav",
+    "durationSec": 0.407,
+    "sizeBytes": 19584
+  },
+  {
+    "key": "3",
+    "char": "さん",
+    "pinyin": "san",
+    "desc": "Three",
+    "file": "3.wav",
+    "durationSec": 0.531,
+    "sizeBytes": 25532
+  },
+  {
+    "key": "4",
+    "char": "よん",
+    "pinyin": "yon",
+    "desc": "Four (Phone / dates)",
+    "file": "4.wav",
+    "durationSec": 0.485,
+    "sizeBytes": 23328
+  },
+  {
+    "key": "5",
+    "char": "ご",
+    "pinyin": "go",
+    "desc": "Five",
+    "file": "5.wav",
+    "durationSec": 0.408,
+    "sizeBytes": 19624
+  },
+  {
+    "key": "6",
+    "char": "ろく",
+    "pinyin": "roku",
+    "desc": "Six",
+    "file": "6.wav",
+    "durationSec": 0.601,
+    "sizeBytes": 28906
+  },
+  {
+    "key": "7",
+    "char": "なな",
+    "pinyin": "nana",
+    "desc": "Seven",
+    "file": "7.wav",
+    "durationSec": 0.567,
+    "sizeBytes": 27240
+  },
+  {
+    "key": "8",
+    "char": "はち",
+    "pinyin": "hachi",
+    "desc": "Eight",
+    "file": "8.wav",
+    "durationSec": 0.607,
+    "sizeBytes": 29164
+  },
+  {
+    "key": "9",
+    "char": "きゅう",
+    "pinyin": "kyū",
+    "desc": "Nine",
+    "file": "9.wav",
+    "durationSec": 0.516,
+    "sizeBytes": 24804
+  },
+  {
+    "key": "10",
+    "char": "じゅう",
+    "pinyin": "jū",
+    "desc": "Ten",
+    "file": "10.wav",
+    "durationSec": 0.521,
+    "sizeBytes": 25048
+  },
+  {
+    "key": "100",
+    "char": "ひゃく",
+    "pinyin": "hyaku",
+    "desc": "Hundred",
+    "file": "100.wav",
+    "durationSec": 0.596,
+    "sizeBytes": 28654
+  },
+  {
+    "key": "1000",
+    "char": "せん",
+    "pinyin": "sen",
+    "desc": "Thousand",
+    "file": "1000.wav",
+    "durationSec": 0.574,
+    "sizeBytes": 27578
+  },
+  {
+    "key": "10000",
+    "char": "まん",
+    "pinyin": "man",
+    "desc": "Ten Thousand",
+    "file": "10000.wav",
+    "durationSec": 0.488,
+    "sizeBytes": 23446
+  },
+  {
+    "key": "100000000",
+    "char": "おく",
+    "pinyin": "oku",
+    "desc": "Hundred Million",
+    "file": "100000000.wav",
+    "durationSec": 0.603,
+    "sizeBytes": 28986
+  },
+  {
+    "key": "300",
+    "char": "さんびゃく",
+    "pinyin": "sanbyaku",
+    "desc": "300 (sanbyaku)",
+    "file": "300.wav",
+    "durationSec": 0.869,
+    "sizeBytes": 41766
+  },
+  {
+    "key": "600",
+    "char": "ろっぴゃく",
+    "pinyin": "roppyaku",
+    "desc": "600 (roppyaku)",
+    "file": "600.wav",
+    "durationSec": 0.905,
+    "sizeBytes": 43504
+  },
+  {
+    "key": "800",
+    "char": "はっぴゃく",
+    "pinyin": "happyaku",
+    "desc": "800 (happyaku)",
+    "file": "800.wav",
+    "durationSec": 0.864,
+    "sizeBytes": 41510
+  },
+  {
+    "key": "3000",
+    "char": "さんぜん",
+    "pinyin": "sanzen",
+    "desc": "3000 (sanzen)",
+    "file": "3000.wav",
+    "durationSec": 0.752,
+    "sizeBytes": 36144
+  },
+  {
+    "key": "8000",
+    "char": "はっせん",
+    "pinyin": "hassen",
+    "desc": "8000 (hassen)",
+    "file": "8000.wav",
+    "durationSec": 0.711,
+    "sizeBytes": 34194
+  },
+  {
+    "key": "4_shi",
+    "char": "し",
+    "pinyin": "shi",
+    "desc": "4 (shi, before 月/日)",
+    "file": "4_shi.wav",
+    "durationSec": 0.482,
+    "sizeBytes": 23160
+  },
+  {
+    "key": "7_shichi",
+    "char": "しち",
+    "pinyin": "shichi",
+    "desc": "7 (shichi, in dates)",
+    "file": "7_shichi.wav",
+    "durationSec": 0.61,
+    "sizeBytes": 29316
+  },
+  {
+    "key": "9_ku",
+    "char": "く",
+    "pinyin": "ku",
+    "desc": "9 (ku, in dates)",
+    "file": "9_ku.wav",
+    "durationSec": 0.386,
+    "sizeBytes": 18568
+  },
+  {
+    "key": "no",
+    "char": "の",
+    "pinyin": "no",
+    "desc": "Phone number chunk separator",
+    "file": "no.wav",
+    "durationSec": 0.413,
+    "sizeBytes": 19862
+  },
+  {
+    "key": "gatsu",
+    "char": "がつ",
+    "pinyin": "gatsu",
+    "desc": "Month (月)",
+    "file": "gatsu.wav",
+    "durationSec": 0.585,
+    "sizeBytes": 28132
+  },
+  {
+    "key": "nichi",
+    "char": "にち",
+    "pinyin": "nichi",
+    "desc": "Day (日)",
+    "file": "nichi.wav",
+    "durationSec": 0.641,
+    "sizeBytes": 30792
+  },
+  {
+    "key": "nen",
+    "char": "ねん",
+    "pinyin": "nen",
+    "desc": "Year (年)",
+    "file": "nen.wav",
+    "durationSec": 0.468,
+    "sizeBytes": 22504
+  },
+  {
+    "key": "tsuitachi",
+    "char": "ついたち",
+    "pinyin": "tsuitachi",
+    "desc": "1st",
+    "file": "tsuitachi.wav",
+    "durationSec": 0.905,
+    "sizeBytes": 43496
+  },
+  {
+    "key": "futsuka",
+    "char": "ふつか",
+    "pinyin": "futsuka",
+    "desc": "2nd",
+    "file": "futsuka.wav",
+    "durationSec": 0.679,
+    "sizeBytes": 32638
+  },
+  {
+    "key": "mikka",
+    "char": "みっか",
+    "pinyin": "mikka",
+    "desc": "3rd",
+    "file": "mikka.wav",
+    "durationSec": 0.683,
+    "sizeBytes": 32808
+  },
+  {
+    "key": "yokka",
+    "char": "よっか",
+    "pinyin": "yokka",
+    "desc": "4th",
+    "file": "yokka.wav",
+    "durationSec": 0.713,
+    "sizeBytes": 34244
+  },
+  {
+    "key": "itsuka",
+    "char": "いつか",
+    "pinyin": "itsuka",
+    "desc": "5th",
+    "file": "itsuka.wav",
+    "durationSec": 0.674,
+    "sizeBytes": 32402
+  },
+  {
+    "key": "muika",
+    "char": "むいか",
+    "pinyin": "muika",
+    "desc": "6th",
+    "file": "muika.wav",
+    "durationSec": 0.719,
+    "sizeBytes": 34546
+  },
+  {
+    "key": "nanoka",
+    "char": "なのか",
+    "pinyin": "nanoka",
+    "desc": "7th",
+    "file": "nanoka.wav",
+    "durationSec": 0.721,
+    "sizeBytes": 34648
+  },
+  {
+    "key": "youka",
+    "char": "ようか",
+    "pinyin": "yōka",
+    "desc": "8th",
+    "file": "youka.wav",
+    "durationSec": 0.699,
+    "sizeBytes": 33588
+  },
+  {
+    "key": "kokonoka",
+    "char": "ここのか",
+    "pinyin": "kokonoka",
+    "desc": "9th",
+    "file": "kokonoka.wav",
+    "durationSec": 0.824,
+    "sizeBytes": 39592
+  },
+  {
+    "key": "tooka",
+    "char": "とおか",
+    "pinyin": "tōka",
+    "desc": "10th",
+    "file": "tooka.wav",
+    "durationSec": 0.675,
+    "sizeBytes": 32442
+  },
+  {
+    "key": "hatsuka",
+    "char": "はつか",
+    "pinyin": "hatsuka",
+    "desc": "20th",
+    "file": "hatsuka.wav",
+    "durationSec": 0.685,
+    "sizeBytes": 32936
+  }
+]

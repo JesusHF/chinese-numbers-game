@@ -1,15 +1,10 @@
-/**
- * Web Audio API manager for gapless playback of pre-cached Chinese number WAV files.
- * Supports multiple natural neural voices ('xiaoxiao' & 'yunxi') and speed rates (0.7x, 1.0x, 1.2x).
- */
-
-import { VoiceId } from '../types/game';
+import { LanguageId } from '../types/language';
 
 class AudioPlayer {
   private ctx: AudioContext | null = null;
-  // Caches per voice: voiceId -> (tokenKey -> AudioBuffer)
-  private voiceCaches: Map<VoiceId, Map<string, AudioBuffer>> = new Map();
-  private preloadedVoices: Set<VoiceId> = new Set();
+  // Caches: `${languageId}/${voiceId}` -> (tokenKey -> AudioBuffer)
+  private voiceCaches: Map<string, Map<string, AudioBuffer>> = new Map();
+  private preloadedVoices: Set<string> = new Set();
   private activeSources: AudioBufferSourceNode[] = [];
   private isPlaying: boolean = false;
   private playTimeoutId: number | null = null;
@@ -24,37 +19,42 @@ class AudioPlayer {
     }
   }
 
-  public async preloadVoice(voiceId: VoiceId): Promise<void> {
-    if (this.preloadedVoices.has(voiceId)) return;
+  public async preloadVoice(languageId: LanguageId, voiceId: string): Promise<void> {
+    const cacheKey = `${languageId}/${voiceId}`;
+    if (this.preloadedVoices.has(cacheKey)) return;
     await this.init();
 
     try {
-      const response = await fetch(`/audio/${voiceId}/manifest.json`);
+      const response = await fetch(`/audio/${languageId}/${voiceId}/manifest.json`);
+      if (!response.ok) {
+        console.warn(`Manifest not found for ${cacheKey}`);
+        return;
+      }
       const manifest: Array<{ key: string; file: string }> = await response.json();
 
-      let cache = this.voiceCaches.get(voiceId);
+      let cache = this.voiceCaches.get(cacheKey);
       if (!cache) {
         cache = new Map();
-        this.voiceCaches.set(voiceId, cache);
+        this.voiceCaches.set(cacheKey, cache);
       }
 
       await Promise.all(
         manifest.map(async (item) => {
           try {
-            const audioRes = await fetch(`/audio/${voiceId}/${item.file}`);
+            const audioRes = await fetch(`/audio/${languageId}/${voiceId}/${item.file}`);
             const arrayBuffer = await audioRes.arrayBuffer();
             if (this.ctx) {
               const audioBuffer = await this.ctx.decodeAudioData(arrayBuffer);
               cache!.set(item.key, audioBuffer);
             }
           } catch (err) {
-            console.warn(`Failed to preload ${voiceId}/${item.key}:`, err);
+            console.warn(`Failed to preload ${cacheKey}/${item.key}:`, err);
           }
         })
       );
-      this.preloadedVoices.add(voiceId);
+      this.preloadedVoices.add(cacheKey);
     } catch (err) {
-      console.error(`Failed to load manifest for voice ${voiceId}:`, err);
+      console.warn(`Failed to load manifest for voice ${cacheKey}:`, err);
     }
   }
 
@@ -78,15 +78,17 @@ class AudioPlayer {
   public async playTokens(
     tokens: (string | { pause: number })[],
     speed: number = 1.0,
-    voiceId: VoiceId = 'xiaoxiao',
+    languageId: LanguageId = 'zh',
+    voiceId: string = 'xiaoxiao',
     onEnded?: () => void
   ): Promise<void> {
-    await this.preloadVoice(voiceId);
+    const cacheKey = `${languageId}/${voiceId}`;
+    await this.preloadVoice(languageId, voiceId);
     this.stop();
 
     if (!this.ctx) return;
 
-    const cache = this.voiceCaches.get(voiceId);
+    const cache = this.voiceCaches.get(cacheKey);
     if (!cache) return;
 
     this.isPlaying = true;
@@ -101,7 +103,7 @@ class AudioPlayer {
 
       const buffer = cache.get(item);
       if (!buffer) {
-        console.warn(`Audio buffer missing for ${voiceId}/${item}`);
+        console.warn(`Audio buffer missing for ${cacheKey}/${item}`);
         continue;
       }
 

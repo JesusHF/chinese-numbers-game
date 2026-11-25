@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GameSettings, Question, UserAnswerResult, DIFFICULTIES } from '../types/game';
 import { audioPlayer } from '../utils/audioPlayer';
+import { getLanguage } from '../languages';
 import { FeedbackCard } from './FeedbackCard';
 import { Volume2, Send, AlertCircle } from 'lucide-react';
 
@@ -31,6 +32,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const diffConfig = DIFFICULTIES[settings.difficulty];
+  const lang = getLanguage(settings.language);
 
   // Play audio for current question using active voice and speed
   const playAudio = (speedMultiplier: number = 1.0) => {
@@ -38,6 +40,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     audioPlayer.playTokens(
       question.audioTokens,
       diffConfig.speed * speedMultiplier,
+      settings.language,
       settings.voice,
       () => {
         setIsPlayingAudio(false);
@@ -60,7 +63,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     return () => {
       audioPlayer.stop();
     };
-  }, [question.id, settings.voice]);
+  }, [question.id, settings.language, settings.voice]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -164,7 +167,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
           {diffConfig.visualClues ? (
             <div className="pt-2 text-center space-y-1">
-              <span className="text-xs text-emerald-400 font-medium">Easy mode visual aid:</span>
+              <span className="text-xs text-emerald-400 font-medium">{lang.uiText.visualAidLabel}</span>
               <div className="text-amber-400 text-sm font-medium">{question.pinyin}</div>
               <div className="chinese-font text-stone-200 text-2xl font-bold">{question.hanzi}</div>
             </div>
@@ -172,7 +175,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             <div className="pt-2 text-center">
               <span className="text-xs text-stone-400/80 flex items-center justify-center space-x-1">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
-                <span>Strict Audio-Only • Listen closely and type the number</span>
+                <span>{lang.uiText.audioOnlyLabel}</span>
               </span>
             </div>
           )}
@@ -193,7 +196,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                 type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
-                placeholder={settings.numberType === 'date' ? 'MM-DD or YYYY-MM-DD' : 'e.g. 523'}
+                placeholder={lang.uiText.inputPlaceholder}
                 autoFocus
                 className="w-full text-center font-mono font-bold text-3xl py-4 bg-stone-900 border-2 border-stone-700 focus:border-red-500 rounded-2xl text-stone-100 placeholder:text-stone-600 focus:outline-none transition-colors"
               />
@@ -209,7 +212,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </button>
           </form>
         ) : (
-          <FeedbackCard result={currentResult} onNext={onNextQuestion} />
+          <FeedbackCard result={currentResult} uiText={lang.uiText} onNext={onNextQuestion} />
         )}
       </div>
     </div>

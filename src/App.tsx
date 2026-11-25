@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GameSettings, Question, UserAnswerResult, DEFAULT_RANGES_BY_DIFFICULTY } from './types/game';
-import { generateQuestion } from './modes';
+import { LanguageId } from './types/language';
+import { getLanguage } from './languages';
 import { Header } from './components/Header';
 import { SetupScreen } from './components/SetupScreen';
 import { GameScreen } from './components/GameScreen';
@@ -11,9 +12,10 @@ type ScreenState = 'setup' | 'playing' | 'results';
 export const App: React.FC = () => {
   const [screen, setScreen] = useState<ScreenState>('setup');
   const [settings, setSettings] = useState<GameSettings>({
+    language: 'zh',
     numberType: 'classic',
     difficulty: 'easy',
-    voice: 'xiaoxiao',
+    voice: getLanguage('zh').defaultVoice,
     range: DEFAULT_RANGES_BY_DIFFICULTY.easy,
     dateOptions: {
       includeYears: false,
@@ -25,10 +27,19 @@ export const App: React.FC = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [results, setResults] = useState<UserAnswerResult[]>([]);
 
+  const handleLanguageChange = (langId: LanguageId) => {
+    const lang = getLanguage(langId);
+    setSettings((prev) => ({
+      ...prev,
+      language: langId,
+      voice: lang.defaultVoice,
+    }));
+  };
+
   const handleStartGame = () => {
     const newQuestions: Question[] = [];
     for (let i = 0; i < settings.totalQuestions; i++) {
-      newQuestions.push(generateQuestion(settings));
+      newQuestions.push(getLanguage(settings.language).generateQuestion(settings));
     }
 
     setQuestions(newQuestions);
@@ -55,7 +66,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-stone-900 text-stone-100 flex flex-col font-sans">
-      <Header />
+      <Header settings={settings} onLanguageChange={handleLanguageChange} />
 
       <main className="flex-1 flex flex-col justify-center">
         {screen === 'setup' && (
