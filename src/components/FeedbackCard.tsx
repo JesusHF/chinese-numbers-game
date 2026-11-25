@@ -21,7 +21,7 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, uiText, onNe
       }`}
     >
       {/* Status banner */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4 sm:gap-6">
         <div className="flex items-center space-x-3">
           {isCorrect ? (
             <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-400">
@@ -41,7 +41,7 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, uiText, onNe
           type="button"
           onClick={onNext}
           autoFocus
-          className="px-5 py-2.5 rounded-xl bg-stone-100 hover:bg-white text-stone-900 font-bold text-sm flex items-center space-x-1.5 shadow-md active:scale-95 transition-all"
+          className="shrink-0 px-5 py-2.5 rounded-xl bg-stone-100 hover:bg-white text-stone-900 font-bold text-sm flex items-center space-x-1.5 shadow-md active:scale-95 transition-all"
         >
           <span>Next [Enter]</span>
           <ArrowRight className="w-4 h-4" />
