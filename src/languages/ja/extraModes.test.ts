@@ -23,6 +23,16 @@ describe('Japanese phoneMode', () => {
     expect(q.audioTokens).not.toContain('yao');
   });
 
+  it('can omit の between number groups while keeping the pause', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+
+    const q = generateJapanesePhoneQuestion('mobile', false);
+    expect(q.audioTokens).not.toContain('no');
+    expect(q.audioTokens.filter((token) => typeof token === 'object')).toHaveLength(2);
+    expect(q.hanzi).not.toContain('の');
+    expect(q.pinyin).not.toContain('no');
+  });
+
   it('uses yon, nana, and kyū instead of shi, shichi, and kuu', () => {
     const cases = [
       { random: 0.45, kana: 'よん', romaji: 'yon' },

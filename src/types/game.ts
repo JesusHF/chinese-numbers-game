@@ -77,5 +77,8 @@ export interface GameSettings {
   dateOptions: {
     includeYears: boolean;
   };
+  phoneOptions: {
+    includeNo: boolean;
+  };
   totalQuestions: number;
 }

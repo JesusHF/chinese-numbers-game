@@ -9,6 +9,7 @@ const baseSettings: GameSettings = {
   voice: 'xiaoxiao',
   range: { min: 0, max: 99 },
   dateOptions: { includeYears: false },
+  phoneOptions: { includeNo: true },
   totalQuestions: 1,
 };
 

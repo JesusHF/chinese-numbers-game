@@ -21,6 +21,9 @@ export const App: React.FC = () => {
     dateOptions: {
       includeYears: false,
     },
+    phoneOptions: {
+      includeNo: true,
+    },
     totalQuestions: 10,
   });
 

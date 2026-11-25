@@ -16,7 +16,8 @@ const JA_PHONE_DIGIT_AUDIO: Record<string, string> = {
 };
 
 export function generateJapanesePhoneQuestion(
-  lengthCategory: 'short' | 'landline' | 'mobile' = 'mobile'
+  lengthCategory: 'short' | 'landline' | 'mobile' = 'mobile',
+  includeNo: boolean = true
 ): Question {
   let chunks: string[] = [];
 
@@ -60,9 +61,12 @@ export function generateJapanesePhoneQuestion(
       romajiList.push(JA_PHONE_DIGIT_ROMAJI[char]);
     }
     if (chunkIdx < chunks.length - 1) {
-      audioTokens.push('no', { pause: 200 });
-      kanaList.push('の');
-      romajiList.push('no');
+      if (includeNo) {
+        audioTokens.push('no');
+        kanaList.push('の');
+        romajiList.push('no');
+      }
+      audioTokens.push({ pause: 200 });
     }
   });
 

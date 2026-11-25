@@ -182,6 +182,29 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
             </label>
           </div>
         )}
+
+        {/* Japanese-only phone separator toggle */}
+        {settings.language === 'ja' && settings.numberType === 'phone' && (
+          <div className="mt-3 p-3 bg-stone-900/80 rounded-xl border border-stone-700/50 flex items-center justify-between">
+            <span className="text-xs text-stone-300">
+              Say 「の」 between number groups?
+            </span>
+            <label className="flex items-center cursor-pointer space-x-2">
+              <input
+                type="checkbox"
+                checked={settings.phoneOptions.includeNo}
+                onChange={(e) =>
+                  onUpdateSettings({
+                    ...settings,
+                    phoneOptions: { includeNo: e.target.checked },
+                  })
+                }
+                className="w-4 h-4 rounded text-red-600 focus:ring-red-500 border-stone-600 bg-stone-800"
+              />
+              <span className="text-xs font-medium text-stone-300">Include 「の」</span>
+            </label>
+          </div>
+        )}
       </div>
 
       {/* 2. Difficulty Section (Speed & Visual Aid) + Compact Voice Switch Toggle */}

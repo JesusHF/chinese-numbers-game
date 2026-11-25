@@ -44,7 +44,7 @@ export function generateJapaneseQuestion(settings: GameSettings): Question {
       return generateJapaneseClassicQuestion(settings.range.min, settings.range.max);
     case 'phone': {
       const category = settings.difficulty === 'easy' ? 'short' : settings.difficulty === 'medium' ? 'landline' : 'mobile';
-      return generateJapanesePhoneQuestion(category);
+      return generateJapanesePhoneQuestion(category, settings.phoneOptions.includeNo);
     }
     case 'date':
       return generateJapaneseDateQuestion(settings.dateOptions.includeYears);
