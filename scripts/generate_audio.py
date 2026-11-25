@@ -50,7 +50,7 @@ TOKENS = [
     {"key": "ri", "char": "日", "pinyin": "rì", "desc": "Day (Formal)"},
 ]
 
-def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.03, pad_ms=15, fade_ms=5):
+def trim_and_fade_audio(input_wav_path, output_wav_path, threshold_ratio=0.02, pad_ms=115, fade_ms=10):
     with wave.open(input_wav_path, 'rb') as w:
         nchannels = w.getnchannels()
         sampwidth = w.getsampwidth()
@@ -136,7 +136,7 @@ async def generate_voice_assets(voice_conf, temp_dir):
         ], check=True)
         
         # 3. Precision silence trimming
-        duration = trim_and_fade_audio(raw_wav, final_wav, threshold_ratio=0.03, pad_ms=15, fade_ms=5)
+        duration = trim_and_fade_audio(raw_wav, final_wav, threshold_ratio=0.02, pad_ms=115, fade_ms=10)
         file_size = os.path.getsize(final_wav)
         
         manifest.append({

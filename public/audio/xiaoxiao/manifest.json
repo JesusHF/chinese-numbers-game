@@ -5,8 +5,8 @@
     "pinyin": "líng",
     "desc": "Zero",
     "file": "0.wav",
-    "durationSec": 0.322,
-    "sizeBytes": 15478
+    "durationSec": 0.522,
+    "sizeBytes": 25098
   },
   {
     "key": "1",
@@ -14,8 +14,8 @@
     "pinyin": "yī",
     "desc": "One (Standard)",
     "file": "1.wav",
-    "durationSec": 0.297,
-    "sizeBytes": 14282
+    "durationSec": 0.497,
+    "sizeBytes": 23882
   },
   {
     "key": "2",
@@ -23,8 +23,8 @@
     "pinyin": "èr",
     "desc": "Two (Standard/Digits)",
     "file": "2.wav",
-    "durationSec": 0.321,
-    "sizeBytes": 15446
+    "durationSec": 0.534,
+    "sizeBytes": 25682
   },
   {
     "key": "2_liang",
@@ -32,8 +32,8 @@
     "pinyin": "liǎng",
     "desc": "Two (Before 百, 千, 万, 亿)",
     "file": "2_liang.wav",
-    "durationSec": 0.306,
-    "sizeBytes": 14726
+    "durationSec": 0.512,
+    "sizeBytes": 24624
   },
   {
     "key": "3",
@@ -41,8 +41,8 @@
     "pinyin": "sān",
     "desc": "Three",
     "file": "3.wav",
-    "durationSec": 0.37,
-    "sizeBytes": 17810
+    "durationSec": 0.579,
+    "sizeBytes": 27816
   },
   {
     "key": "4",
@@ -50,8 +50,8 @@
     "pinyin": "sì",
     "desc": "Four",
     "file": "4.wav",
-    "durationSec": 0.383,
-    "sizeBytes": 18436
+    "durationSec": 0.588,
+    "sizeBytes": 28256
   },
   {
     "key": "5",
@@ -59,8 +59,8 @@
     "pinyin": "wǔ",
     "desc": "Five",
     "file": "5.wav",
-    "durationSec": 0.316,
-    "sizeBytes": 15216
+    "durationSec": 0.521,
+    "sizeBytes": 25032
   },
   {
     "key": "6",
@@ -68,8 +68,8 @@
     "pinyin": "liù",
     "desc": "Six",
     "file": "6.wav",
-    "durationSec": 0.32,
-    "sizeBytes": 15390
+    "durationSec": 0.522,
+    "sizeBytes": 25082
   },
   {
     "key": "7",
@@ -77,8 +77,8 @@
     "pinyin": "qī",
     "desc": "Seven",
     "file": "7.wav",
-    "durationSec": 0.366,
-    "sizeBytes": 17598
+    "durationSec": 0.566,
+    "sizeBytes": 27198
   },
   {
     "key": "8",
@@ -86,8 +86,8 @@
     "pinyin": "bā",
     "desc": "Eight",
     "file": "8.wav",
-    "durationSec": 0.312,
-    "sizeBytes": 14998
+    "durationSec": 0.519,
+    "sizeBytes": 24940
   },
   {
     "key": "9",
@@ -95,8 +95,8 @@
     "pinyin": "jiǔ",
     "desc": "Nine",
     "file": "9.wav",
-    "durationSec": 0.314,
-    "sizeBytes": 15120
+    "durationSec": 0.52,
+    "sizeBytes": 25002
   },
   {
     "key": "10",
@@ -104,8 +104,8 @@
     "pinyin": "shí",
     "desc": "Ten",
     "file": "10.wav",
-    "durationSec": 0.402,
-    "sizeBytes": 19362
+    "durationSec": 0.608,
+    "sizeBytes": 29218
   },
   {
     "key": "100",
@@ -113,8 +113,8 @@
     "pinyin": "bǎi",
     "desc": "Hundred",
     "file": "100.wav",
-    "durationSec": 0.326,
-    "sizeBytes": 15714
+    "durationSec": 0.529,
+    "sizeBytes": 25434
   },
   {
     "key": "1000",
@@ -122,8 +122,8 @@
     "pinyin": "qiān",
     "desc": "Thousand",
     "file": "1000.wav",
-    "durationSec": 0.344,
-    "sizeBytes": 16560
+    "durationSec": 0.552,
+    "sizeBytes": 26532
   },
   {
     "key": "10000",
@@ -131,8 +131,8 @@
     "pinyin": "wàn",
     "desc": "Ten Thousand (Myriad)",
     "file": "10000.wav",
-    "durationSec": 0.325,
-    "sizeBytes": 15660
+    "durationSec": 0.533,
+    "sizeBytes": 25626
   },
   {
     "key": "100000000",
@@ -140,8 +140,8 @@
     "pinyin": "yì",
     "desc": "Hundred Million",
     "file": "100000000.wav",
-    "durationSec": 0.311,
-    "sizeBytes": 14966
+    "durationSec": 0.511,
+    "sizeBytes": 24566
   },
   {
     "key": "yao",
@@ -149,8 +149,8 @@
     "pinyin": "yāo",
     "desc": "One (Phone numbers / codes)",
     "file": "yao.wav",
-    "durationSec": 0.315,
-    "sizeBytes": 15186
+    "durationSec": 0.529,
+    "sizeBytes": 25440
   },
   {
     "key": "nian",
@@ -158,8 +158,8 @@
     "pinyin": "nián",
     "desc": "Year",
     "file": "nian.wav",
-    "durationSec": 0.317,
-    "sizeBytes": 15258
+    "durationSec": 0.525,
+    "sizeBytes": 25236
   },
   {
     "key": "yue",
@@ -167,8 +167,8 @@
     "pinyin": "yuè",
     "desc": "Month",
     "file": "yue.wav",
-    "durationSec": 0.316,
-    "sizeBytes": 15192
+    "durationSec": 0.525,
+    "sizeBytes": 25238
   },
   {
     "key": "hao",
@@ -176,8 +176,8 @@
     "pinyin": "hào",
     "desc": "Day (Spoken)",
     "file": "hao.wav",
-    "durationSec": 0.28,
-    "sizeBytes": 13498
+    "durationSec": 0.489,
+    "sizeBytes": 23528
   },
   {
     "key": "ri",
@@ -185,7 +185,7 @@
     "pinyin": "rì",
     "desc": "Day (Formal)",
     "file": "ri.wav",
-    "durationSec": 0.321,
-    "sizeBytes": 15472
+    "durationSec": 0.53,
+    "sizeBytes": 25476
   }
 ]
