@@ -32,8 +32,8 @@ export const japaneseLanguage: LanguageDefinition = {
     visualAidLabel: 'Easy mode visual aid:',
     audioOnlyLabel: 'Strict Audio-Only • Listen closely and type the number',
     inputPlaceholder: '例: 523',
-    correctLabel: 'Correct! 正解！',
-    incorrectLabel: 'Incorrect',
+    correctLabel: '正解！',
+    incorrectLabel: '不正解',
   },
   generateQuestion: generateJapaneseQuestion,
 };

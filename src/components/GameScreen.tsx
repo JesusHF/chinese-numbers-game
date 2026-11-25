@@ -1,9 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { GameSettings, Question, UserAnswerResult, DIFFICULTIES } from '../types/game';
+import { GameSettings, Question, UserAnswerResult, DIFFICULTIES, NumberTypeId } from '../types/game';
 import { audioPlayer } from '../utils/audioPlayer';
 import { getLanguage } from '../languages';
 import { FeedbackCard } from './FeedbackCard';
 import { Volume2, Send, AlertCircle } from 'lucide-react';
+
+/** Normalizes numeric answers so 9-12 and 09-12 (or 9 and 09) compare equal. */
+function normalizeAnswer(value: string, numberType: NumberTypeId): string {
+  const cleaned = value.trim().replace(/\s+/g, '');
+
+  // Phone numbers keep leading zeroes (090...) but may be typed with dashes.
+  if (numberType === 'phone') {
+    return cleaned.replace(/-/g, '').toLowerCase();
+  }
+
+  return cleaned
+    .replace(/[\/.]/g, '-')
+    .split('-')
+    .map((part) => (/^\d+$/.test(part) ? String(Number(part)) : part.toLowerCase()))
+    .join('-');
+}
 
 interface GameScreenProps {
   settings: GameSettings;
@@ -86,10 +102,10 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     if (e) e.preventDefault();
     if (currentResult !== null) return;
 
-    const cleanInput = userInput.trim().replace(/\s+/g, '');
-    const cleanExpected = question.expectedAnswer.trim().replace(/\s+/g, '');
+    const cleanInput = normalizeAnswer(userInput, settings.numberType);
+    const cleanExpected = normalizeAnswer(question.expectedAnswer, settings.numberType);
 
-    const isCorrect = cleanInput.toLowerCase() === cleanExpected.toLowerCase();
+    const isCorrect = cleanInput === cleanExpected;
     const timeSpentSec = (Date.now() - startTimeRef.current) / 1000;
 
     const result: UserAnswerResult = {

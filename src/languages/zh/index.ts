@@ -32,8 +32,8 @@ export const chineseLanguage: LanguageDefinition = {
     visualAidLabel: 'Easy mode visual aid:',
     audioOnlyLabel: 'Strict Audio-Only • Listen closely and type the number',
     inputPlaceholder: '例如 523',
-    correctLabel: 'Correct! 很好！',
-    incorrectLabel: 'Incorrect',
+    correctLabel: '很好！',
+    incorrectLabel: '不对',
   },
   generateQuestion: generateChineseQuestion,
 };
