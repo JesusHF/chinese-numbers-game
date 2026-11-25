@@ -32,16 +32,9 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, uiText, onNe
               <XCircle className="w-6 h-6" />
             </div>
           )}
-          <div>
-            <h3 className="font-bold text-lg text-stone-100">
-              {isCorrect ? uiText.correctLabel : uiText.incorrectLabel}
-            </h3>
-            <p className="text-xs text-stone-400">
-              {isCorrect
-                ? `You typed: ${userAnswer}`
-                : `You typed: ${userAnswer || '(empty)'} • Expected: ${question.expectedAnswer}`}
-            </p>
-          </div>
+          <h3 className="font-bold text-lg text-stone-100">
+            {isCorrect ? uiText.correctLabel : uiText.incorrectLabel}
+          </h3>
         </div>
 
         <button
@@ -55,8 +48,26 @@ export const FeedbackCard: React.FC<FeedbackCardProps> = ({ result, uiText, onNe
         </button>
       </div>
 
-      {/* Chinese Characters + Tone-marked Pinyin Breakdown */}
+      {/* Answer comparison + native text / phonetic reading breakdown */}
       <div className="bg-stone-900/80 rounded-xl p-5 border border-stone-800 space-y-3">
+        <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-xs text-stone-400">
+          <span>
+            You typed:{' '}
+            <span className={`font-mono break-all ${isCorrect ? 'text-emerald-300' : 'text-red-300'}`}>
+              {userAnswer || '(empty)'}
+            </span>
+          </span>
+          {!isCorrect && (
+            <>
+              <span aria-hidden="true">•</span>
+              <span>
+                Expected:{' '}
+                <span className="font-mono break-all text-emerald-300">{question.expectedAnswer}</span>
+              </span>
+            </>
+          )}
+        </div>
+
         <div className="text-center space-y-1">
           <div className="text-amber-400 text-sm font-medium tracking-wide">
             {question.pinyin}
