@@ -85,11 +85,89 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4 space-y-8">
-      {/* 1. Number Type Section */}
+      {/* 1. Difficulty Section (Speed & Visual Aid) + Compact Voice Switch Toggle */}
+      <div className="bg-stone-800/60 border border-stone-700/60 rounded-2xl p-6 shadow-xl space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-base font-semibold text-stone-200 flex items-center space-x-2">
+            <span className="w-6 h-6 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center text-xs font-bold">1</span>
+            <span>Difficulty (Speed & Visual Aid)</span>
+          </h2>
+
+          {/* Compact Voice Switch Toggle */}
+          <div className="flex items-center space-x-2 bg-stone-900/90 border border-stone-700/70 p-1 rounded-xl">
+            <span className="text-[11px] text-stone-400 pl-1.5 pr-0.5 font-medium flex items-center space-x-1">
+              <Volume2 className="w-3 h-3 text-amber-400" />
+              <span>Voice:</span>
+            </span>
+            {Object.keys(voices).map((vId) => {
+              const voice: VoiceConfig = voices[vId];
+              const isSelected = settings.voice === vId;
+              return (
+                <button
+                  key={vId}
+                  type="button"
+                  onClick={() => handleVoiceToggle(vId)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 ${
+                    isSelected
+                      ? 'bg-red-600 text-white shadow-sm font-semibold'
+                      : 'text-stone-400 hover:text-stone-200 hover:bg-stone-800'
+                  }`}
+                  title={`Switch to ${voice.name} (${voice.gender}) natural voice`}
+                >
+                  <span>{voice.avatar}</span>
+                  <span>{voice.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {(Object.keys(DIFFICULTIES) as DifficultyId[]).map((diffId) => {
+            const conf = DIFFICULTIES[diffId];
+            const isSelected = settings.difficulty === diffId;
+            return (
+              <button
+                key={diffId}
+                type="button"
+                onClick={() => handleDifficultySelect(diffId)}
+                className={`p-4 rounded-xl border text-left transition-all ${
+                  isSelected
+                    ? 'bg-amber-950/30 border-amber-500 shadow-md shadow-amber-950/20'
+                    : 'bg-stone-900/60 border-stone-700/50 hover:border-stone-600'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-bold text-stone-100">{conf.name}</span>
+                  <span className="text-xs px-2 py-0.5 rounded font-mono font-semibold bg-stone-800 text-amber-300 border border-stone-700">
+                    {conf.speed}x speed
+                  </span>
+                </div>
+
+                <div className="flex items-center space-x-2 text-xs text-stone-400">
+                  {conf.visualClues ? (
+                    <span className="flex items-center space-x-1 text-emerald-400">
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Visual {settings.language === 'ja' ? 'Kanji & Kana' : 'Hanzi & Pinyin'}</span>
+                    </span>
+                  ) : (
+                    <span className="flex items-center space-x-1 text-amber-400 font-medium">
+                      <EyeOff className="w-3.5 h-3.5" />
+                      <span>Strict Audio-Only</span>
+                    </span>
+                  )}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* 2. Number Type Section */}
       <div className="bg-stone-800/60 border border-stone-700/60 rounded-2xl p-6 shadow-xl space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold text-stone-200 flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center text-xs font-bold">1</span>
+            <span className="w-6 h-6 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center text-xs font-bold">2</span>
             <span>Select Number Type</span>
           </h2>
           <span className="text-xs text-stone-400">{lang.uiText.typeHint}</span>
@@ -205,84 +283,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
             </label>
           </div>
         )}
-      </div>
-
-      {/* 2. Difficulty Section (Speed & Visual Aid) + Compact Voice Switch Toggle */}
-      <div className="bg-stone-800/60 border border-stone-700/60 rounded-2xl p-6 shadow-xl space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-base font-semibold text-stone-200 flex items-center space-x-2">
-            <span className="w-6 h-6 rounded-full bg-red-600/20 text-red-400 flex items-center justify-center text-xs font-bold">2</span>
-            <span>Difficulty (Speed & Visual Aid)</span>
-          </h2>
-
-          {/* Compact Voice Switch Toggle */}
-          <div className="flex items-center space-x-2 bg-stone-900/90 border border-stone-700/70 p-1 rounded-xl">
-            <span className="text-[11px] text-stone-400 pl-1.5 pr-0.5 font-medium flex items-center space-x-1">
-              <Volume2 className="w-3 h-3 text-amber-400" />
-              <span>Voice:</span>
-            </span>
-            {Object.keys(voices).map((vId) => {
-              const voice: VoiceConfig = voices[vId];
-              const isSelected = settings.voice === vId;
-              return (
-                <button
-                  key={vId}
-                  type="button"
-                  onClick={() => handleVoiceToggle(vId)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center space-x-1.5 ${
-                    isSelected
-                      ? 'bg-red-600 text-white shadow-sm font-semibold'
-                      : 'text-stone-400 hover:text-stone-200 hover:bg-stone-800'
-                  }`}
-                  title={`Switch to ${voice.name} (${voice.gender}) natural voice`}
-                >
-                  <span>{voice.avatar}</span>
-                  <span>{voice.name}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {(Object.keys(DIFFICULTIES) as DifficultyId[]).map((diffId) => {
-            const conf = DIFFICULTIES[diffId];
-            const isSelected = settings.difficulty === diffId;
-            return (
-              <button
-                key={diffId}
-                type="button"
-                onClick={() => handleDifficultySelect(diffId)}
-                className={`p-4 rounded-xl border text-left transition-all ${
-                  isSelected
-                    ? 'bg-amber-950/30 border-amber-500 shadow-md shadow-amber-950/20'
-                    : 'bg-stone-900/60 border-stone-700/50 hover:border-stone-600'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-bold text-stone-100">{conf.name}</span>
-                  <span className="text-xs px-2 py-0.5 rounded font-mono font-semibold bg-stone-800 text-amber-300 border border-stone-700">
-                    {conf.speed}x speed
-                  </span>
-                </div>
-
-                <div className="flex items-center space-x-2 text-xs text-stone-400">
-                  {conf.visualClues ? (
-                    <span className="flex items-center space-x-1 text-emerald-400">
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Visual {settings.language === 'ja' ? 'Kanji & Kana' : 'Hanzi & Pinyin'}</span>
-                    </span>
-                  ) : (
-                    <span className="flex items-center space-x-1 text-amber-400 font-medium">
-                      <EyeOff className="w-3.5 h-3.5" />
-                      <span>Strict Audio-Only</span>
-                    </span>
-                  )}
-                </div>
-              </button>
-            );
-          })}
-        </div>
       </div>
 
       {/* 3. Number Range Section */}
