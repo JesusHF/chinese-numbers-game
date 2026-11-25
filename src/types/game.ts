@@ -16,9 +16,9 @@ export const DIFFICULTIES: Record<DifficultyId, DifficultyConfig> = {
   easy: {
     id: 'easy',
     name: 'Easy',
-    speed: 0.7,
+    speed: 0.9,
     visualClues: true,
-    description: '0.7x speed • Visual guides visible',
+    description: '0.9x speed • Visual guides visible',
   },
   medium: {
     id: 'medium',

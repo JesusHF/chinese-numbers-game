@@ -11,7 +11,7 @@ An interactive web-based listening practice game for Mandarin Chinese and Japane
   - **Dates**: Chinese months (`月`) and days (`号`), or Japanese months with native day readings (`ついたち`, `ふつか`, `みっか`…), with an optional year toggle.
 - **Decoupled Difficulty & Range**:
   - **Difficulty**:
-    - **Easy**: `0.7x` speed + visual scaffolding (Hanzi & Pinyin guides).
+    - **Easy**: `0.9x` speed + visual scaffolding (Hanzi & Pinyin guides).
     - **Medium**: `1.0x` speed + **strict audio-only** (zero visual clues).
     - **Hard**: `1.2x` speed + **strict audio-only** (fast speech).
   - **Number Range**: Dual dropdowns (Min: `0` to `1,000,000`, Max: `9` to `9,999,999`) with smart defaults per difficulty.
